@@ -40,6 +40,13 @@ ggplot(data = Combined_means, aes(x=mean_weight, y=mean_hindfoot_length, color =
 #export graph
 ggsave("Figure 1.pdf")
 
+# ANOVA: is variation among groups different? Do the species have different morphologie
+data(surveys_sml)
+head(surveys_sml)
+fit<- aov(weight ~ hindfoot_length, data=surveys_sml) # fit model
+fit # look at fit
+summary(fit) #summarize and show results
+
 ## Comparison of average weight by year (line graph)by species
 
 # select year and weight data only and filter out the NA data
@@ -107,11 +114,6 @@ ggplot(survey_species, aes(x=weight)) +
 #export as pdf
 ggsave("Figure 5.pdf")
 
-# ANOVA: is variation among groups different? Do the species have different morphologie
-data(surveys_sml)
-head(surveys_sml)
-fit<- aov(weight ~ hindfoot_length, data=surveys_sml) # fit model
-fit # look at fit
-summary(fit) #summarize and show results
+
 
 
