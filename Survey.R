@@ -115,6 +115,10 @@ ggplot(survey_species, aes(x=weight)) +
 #export as pdf
 ggsave("Figure 5.pdf")
 
+# citations for ggplot2
+citation(package = "ggplot2", lib.loc = NULL) 
 
+#citations for dplyr
+citation(package = "dplyr", lib.loc = NULL)
 
 
