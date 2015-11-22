@@ -16,39 +16,37 @@ surveys <- read.csv('data/portal_data_joined.csv')
 
 #data parsing
 
-<<<<<<< HEAD
-# filter weight less than 100 and selects the species id, hindfoot length and weight, removes NA from weight and hindfoot length. Puts it all in the file survey sml
+# filter weight less than 100  and selects the species id, hindfoot length and weight, removes NA from weight and hindfoot length. Puts it all in the file survey sml
 surveys_sml<- surveys %>%  
-  filter(weight < 100) %>%
-
-# filter weight less than 15 and selects the species id, hindfoot length and weight, removes NA from weight and hindfoot length. Puts it all in the file survey sml
-surveys_sml<- surveys %>%  
-  filter(weight < 15) %>%
   select(species_id, hindfoot_length, weight)%>%
   filter(!is.na(weight))%>%  
   filter(!is.na(hindfoot_length))
 
-#Find the mean for weight and hindfoot length and group by species_id
+#Find the mean for weight and group by species_id
 weight_mean<-surveys_sml%>%
   group_by(species_id)%>%
   summarize(mean_weight = mean(weight, na.rm = TRUE))
-  group_by(species_id)%>%
+
+# Find the mean for hindfoot length  and group by species _id
+hindfoot_length_mean<-surveys_sml%>%
+group_by(species_id)%>%
   summarize(mean_hindfoot_length = mean(hindfoot_length, na.rm = TRUE))
-Combined_means<-cbind(weight_mean, Hindfoot_length_mean)
+
+# combine data from mean_weight and mean_hindfoot_length
+Combined_means<-cbind(weight_mean, hindfoot_length_mean)
   
 #build figure
-# scatter plot
-ggplot(data = Combined_means, aes(x=mean_weight, y=mean_hindfoot_length)) + geom_point()
-#modify the color, size of points in the point layer,  modify x-axis and y-axis labels and add a title
+
+#Scatter plot with modified color, size of points in the point layer,  modify x-axis and y-axis labels and add a title
 ggplot(data = Combined_means, aes(x=mean_weight, y=mean_hindfoot_length, color = species_id)) + geom_point(size = 2.5) + xlab("Average Weight") + ylab("Average Hindfoot Length") + ggtitle("Figure 1")
 
 
 #export graph
 ggsave("Figure 1.pdf")
 
+## Run ANOVA statistical test on relationship between weight and hindfoot length to see if numbers indicate a relationship
+
 # ANOVA: is variation among groups different? Do the species have different morphologie
-data(surveys_sml)
-head(surveys_sml)
 fit<- aov(weight ~ hindfoot_length, data=surveys_sml) # fit model
 fit # look at fit
 summary(fit) #summarize and show results
@@ -65,10 +63,7 @@ weight_mean<-survey_com%>%
   group_by(year)%>%
   summarize(mean_weight = mean(weight, na.rm = TRUE))
 
-# create a line graph
-ggplot(data = weight_mean, aes(x=year, y=mean_weight)) + geom_line()
-
-#modify the color, size of line,  modify x-axis and y-axis labels and add a title
+# create a line graph, modify the color, size of line,  modify x-axis and y-axis labels and add a title
 ggplot(data = weight_mean, aes(x=year, y=mean_weight, color = mean_weight)) + geom_line(size =1.5) + xlab("Year of Collection") + ylab("Average Weight") + ggtitle("Figure 2")
 
 #export the graph
@@ -77,7 +72,7 @@ ggsave("Figure 2.pdf")
 ## Distribution of weight in males
 
 # select only data concerned with weight and males of organisms, remove all NA in the weight data
-survey_com<-surveys%>%
+survey_dis<-surveys%>%
   filter(sex == 'M')%>%
   select(sex, weight, species_id)%>%
    filter(!is.na(weight))%>%
@@ -85,14 +80,14 @@ survey_com<-surveys%>%
 
 # create histogram of weight of males
 
-ggplot(survey_com, aes(x=weight)) +
+ggplot(survey_dis, aes(x=weight)) +
   geom_histogram(binwidth= 1.0, colour="black", fill="green") + xlab("weight") + ylab("Number of Males") + ggtitle("Figure 3")
 
 # export to pdf
 ggsave("Figure 3.pdf")
 
 # filter weight to between 0-100
-survey_com<-surveys%>%
+survey_dis_weight_limited<-surveys%>%
   filter(sex == 'M')%>%
   select(sex, weight, species_id)%>%
   filter(!is.na(weight))%>%
@@ -100,13 +95,13 @@ survey_com<-surveys%>%
   filter(weight< 100)
 
 # create histogram save as figure 4
-ggplot(survey_com, aes(x=weight)) +
+ggplot(survey_dis_weight_limited, aes(x=weight)) +
   geom_histogram(binwidth= 1.0, colour="black", fill="green") + xlab("weight") + ylab("Number of Males") + ggtitle("Figure 4")
 
 # export as pdf
 ggsave("Figure 4.pdf")
 
-# create new object with no filter for weight
+# create new object with no filter for weight,selection for male, no selection for hindfootlength
 survey_species<-surveys%>%
   filter(sex == 'M')%>%
   select(sex, weight, species_id)%>%
