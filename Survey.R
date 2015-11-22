@@ -16,9 +16,14 @@ surveys <- read.csv('data/portal_data_joined.csv')
 
 #data parsing
 
+<<<<<<< HEAD
 # filter weight less than 100 and selects the species id, hindfoot length and weight, removes NA from weight and hindfoot length. Puts it all in the file survey sml
 surveys_sml<- surveys %>%  
   filter(weight < 100) %>%
+
+# filter weight less than 15 and selects the species id, hindfoot length and weight, removes NA from weight and hindfoot length. Puts it all in the file survey sml
+surveys_sml<- surveys %>%  
+  filter(weight < 15) %>%
   select(species_id, hindfoot_length, weight)%>%
   filter(!is.na(weight))%>%  
   filter(!is.na(hindfoot_length))
@@ -36,6 +41,7 @@ Combined_means<-cbind(weight_mean, Hindfoot_length_mean)
 ggplot(data = Combined_means, aes(x=mean_weight, y=mean_hindfoot_length)) + geom_point()
 #modify the color, size of points in the point layer,  modify x-axis and y-axis labels and add a title
 ggplot(data = Combined_means, aes(x=mean_weight, y=mean_hindfoot_length, color = species_id)) + geom_point(size = 2.5) + xlab("Average Weight") + ylab("Average Hindfoot Length") + ggtitle("Figure 1")
+
 
 #export graph
 ggsave("Figure 1.pdf")
