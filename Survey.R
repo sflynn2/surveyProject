@@ -1,22 +1,22 @@
 ## Survey Project in R
 
-#install and load library
+#install and load libraries
 install.packages("dplyr")
 install.packages ("ggplot2")
 library(dplyr)
 library(ggplot2)
 
-# download a file
+# download data file
 download.file("http://files.figshare.com/2236372/combined.csv",  "data/portal_data_joined.csv")# data for project is in the portal_data_joined.csv
 
-# import that file
+# import data file
 surveys <- read.csv('data/portal_data_joined.csv')
 
 ## explore relationship between weight and hindfoot length for each species
 
 #data parsing
 
-# filter weight less than 100  and selects the species id, hindfoot length and weight, removes NA from weight and hindfoot length. Puts it all in the file survey sml
+# Selects the species id, hindfoot length and weight data from surveys, removes NA from weight and hindfoot length. Puts it all in the file survey sml
 surveys_sml<- surveys %>%  
   select(species_id, hindfoot_length, weight)%>%
   filter(!is.na(weight))%>%  
@@ -58,7 +58,7 @@ survey_com<- surveys %>%
   select(weight, year)%>%
   filter(!is.na(weight))
 
-# Create a new object "weight_mean from survey_dis.  Group data by year
+# Create a new object "weight_mean from survey_com.  Group data by year
 weight_mean<-survey_com%>%
   group_by(year)%>%
   summarize(mean_weight = mean(weight, na.rm = TRUE))
@@ -71,7 +71,7 @@ ggsave("Figure 2.pdf")
 
 ## Distribution of weight in males
 
-# select only data concerned with weight and males of organisms, remove all NA in the weight data
+# select only data concerned with weight and males of organisms, remove all NA in the weight and species id data; create new object survey_dis
 survey_dis<-surveys%>%
   filter(sex == 'M')%>%
   select(sex, weight, species_id)%>%
@@ -86,7 +86,7 @@ ggplot(survey_dis, aes(x=weight)) +
 # export to pdf
 ggsave("Figure 3.pdf")
 
-# filter weight to between 0-100
+# filter weight to between 0-100 to better visualize the majority of the data. Filter out the NA from weight and species ID and keep only the Male data
 survey_dis_weight_limited<-surveys%>%
   filter(sex == 'M')%>%
   select(sex, weight, species_id)%>%
@@ -101,7 +101,7 @@ ggplot(survey_dis_weight_limited, aes(x=weight)) +
 # export as pdf
 ggsave("Figure 4.pdf")
 
-# create new object with no filter for weight,selection for male, no selection for hindfootlength
+# create new object with no filter for weight,selection for male, no selection for hindfootlength; filter out NA from weight and species ID
 survey_species<-surveys%>%
   filter(sex == 'M')%>%
   select(sex, weight, species_id)%>%
