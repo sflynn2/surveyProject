@@ -38,7 +38,7 @@ Combined_means<-cbind(weight_mean, hindfoot_length_mean)
 #build figure to show relationship between average weight and hindfoot length
 
 #Scatter plot with modified color, size of points in the point layer,  modify x-axis and y-axis labels and add a title
-ggplot(data = Combined_means, aes(x=mean_weight, y=mean_hindfoot_length, color = species_id)) + geom_point(size = 2.5) + xlab("Average Weight - g") + ylab("Average Hindfoot Length - mm") + ggtitle("Figure 1")
+ggplot(data = Combined_means, aes(x=mean_weight, y=mean_hindfoot_length, color = species_id)) + geom_point(size = 2.5) + xlab("Average Weight - g") + ylab("Average Hindfoot Length - mm") + ggtitle("Mean Hindfoor Length Relationship to Mean Weight")
 
 
 #export graph
@@ -64,7 +64,7 @@ weight_mean<-survey_com%>%
   summarize(mean_weight = mean(weight, na.rm = TRUE))
 
 # create a line graph, modify the color, size of line,  modify x-axis and y-axis labels and add a title
-ggplot(data = weight_mean, aes(x=year, y=mean_weight, color = mean_weight)) + geom_line(size =1.5) + xlab("Year of Collection") + ylab("Average Weight-g") + ggtitle("Figure 2")
+ggplot(data = weight_mean, aes(x=year, y=mean_weight, color = mean_weight)) + geom_line(size =1.5) + xlab("Year of Collection") + ylab("Average Weight-g") + ggtitle("Comparison of Average Weight by Year and Species")
 
 #export the graph
 ggsave("Figures/Figure 2.pdf")
@@ -81,22 +81,17 @@ survey_dis<-surveys%>%
 # create histogram of weight of males; choosing color and fill; labeling x-aXIS and y-axis and titling the figure
 
 ggplot(survey_dis, aes(x=weight)) +
-  geom_histogram(binwidth= 1.0, colour="black", fill="green") + xlab("weight-g") + ylab("Number of Males") + ggtitle("Figure 3")
+  geom_histogram(binwidth= 1.0, fill="green") + xlab("weight-g") + ylab("Number of Males") + ggtitle("Distribution of Weight in Males")
 
 # export to pdf
 ggsave("Figures/Figure 3.pdf")
 
 # filter weight to between 0-100 to better visualize the majority of the data. Filter out the NA from weight and species ID and keep only the Male data. Store data in a new object called survey_dis_weight_limited
-survey_dis_weight_limited<-surveys%>%
-  filter(sex == 'M')%>%
-  select(sex, weight, species_id)%>%
-  filter(!is.na(weight))%>%
-  filter(!is.na(species_id))%>%
-  filter(weight< 100)
+
 
 # create histogram save as figure 4
 ggplot(survey_dis_weight_limited, aes(x=weight)) +
-  geom_histogram(binwidth= 1.0, colour="black", fill="green") + xlab("weight-g") + ylab("Number of Males") + ggtitle("Figure 4")
+  geom_histogram(binwidth= 1.0, colour="black", fill="green") + xlab("weight-g") + ylab("Number of Males") + ggtitle("Distribution of Weight in Males Under 100 grams")
 
 # export as pdf
 ggsave("Figures/Figure 4.pdf")
@@ -110,7 +105,7 @@ survey_species<-surveys%>%
 
 # create histogram of weight of male per species using a facet wrap
 ggplot(survey_species, aes(x=weight)) +
-  geom_histogram(binwidth= 1.0, colour="green") + xlab("weight=g") + ylab("Number of Males") + ggtitle("Figure 5") + facet_wrap(~ species_id)
+  geom_histogram(binwidth= 1.0, colour="green") + xlab("weight=g") + ylab("Number of Males") + ggtitle("Distribution of Weight in Males by Species") + facet_wrap(~ species_id)
 
 #export as pdf
 ggsave("Figures/Figure 5.pdf")
